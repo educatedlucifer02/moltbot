@@ -8,6 +8,7 @@ import {
 } from "../channels/targets.js";
 
 import type { DirectoryConfigParams } from "../channels/plugins/directory-config.js";
+import type { ChannelDirectoryEntry } from "../channels/plugins/types.js";
 
 import { listDiscordDirectoryPeersLive } from "./directory-live.js";
 
@@ -23,7 +24,7 @@ export function parseDiscordTarget(
 ): DiscordTarget | undefined {
   const trimmed = raw.trim();
   if (!trimmed) return undefined;
-  const mentionMatch = trimmed.match(/^<@!?(\d+)>$/);
+  const mentionMatch = trimmed.match(/^<@!(\d+)>$/);
   if (mentionMatch) {
     return buildMessagingTarget("user", mentionMatch[1], trimmed);
   }
@@ -127,7 +128,7 @@ function safeParseDiscordTarget(
 }
 
 function isExplicitUserLookup(input: string, options: DiscordTargetParseOptions): boolean {
-  if (/^<@!?(\d+)>$/.test(input)) {
+  if (/^<@!(\d+)>$/.test(input)) {
     return true;
   }
   if (/^(user:|discord:)/.test(input)) {
